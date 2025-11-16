@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MWF Full UML Diagram</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        .diagram {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .entity {
+            border: 2px solid #2a7ae2;
+            border-radius: 8px;
+            padding: 15px;
+            width: 200px;
+            background-color: #fff;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        .entity h3 {
+            margin-top: 0;
+            color: #2a7ae2;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .entity ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .entity ul li {
+            padding: 3px 0;
+        }
+        .relationship {
+            margin-top: 20px;
+        }
+        .relationship ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .relationship li {
+            margin: 5px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>MWF Full Models UML Diagram</h1>
+    <div class="diagram">
+        <!-- Accounts -->
+        <div class="entity">
+            <h3>Staff</h3>
+            <ul>
+                <li>user (OneToOne → Django User)</li>
+                <li>role (manager / attendant)</li>
+                <li>phone</li>
+                <li>email</li>
+            </ul>
+        </div>
+
+        <div class="entity">
+            <h3>Customer</h3>
+            <ul>
+                <li>name</li>
+                <li>contact</li>
+                <li>email</li>
+                <li>address</li>
+            </ul>
+        </div>
+
+        <!-- Inventory -->
+        <div class="entity">
+            <h3>Supplier</h3>
+            <ul>
+                <li>name</li>
+                <li>contact</li>
+                <li>email</li>
+                <li>address</li>
+            </ul>
+        </div>
+
+        <div class="entity">
+            <h3>Product</h3>
+            <ul>
+                <li>name</li>
+                <li>category (Wood / Furniture)</li>
+                <li>unit_price</li>
+                <li>supplier (FK → Supplier)</li>
+            </ul>
+        </div>
+
+        <div class="entity">
+            <h3>Stock</h3>
+            <ul>
+                <li>product (FK → Product)</li>
+                <li>quantity</li>
+                <li>warehouse</li>
+                <li>last_updated</li>
+            </ul>
+        </div>
+
+        <!-- Sales -->
+        <div class="entity">
+            <h3>Sale</h3>
+            <ul>
+                <li>customer (FK → Customer)</li>
+                <li>staff (FK → Staff)</li>
+                <li>date</li>
+                <li>total_amount</li>
+                <li>transport_fee (5%)</li>
+            </ul>
+        </div>
+
+        <div class="entity">
+            <h3>SaleItem</h3>
+            <ul>
+                <li>sale (FK → Sale)</li>
+                <li>stock (FK → Stock)</li>
+                <li>quantity</li>
+                <li>subtotal</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="relationship">
+        <h2>Relationships:</h2>
+        <ul>
+            <li>Supplier → Product (One-to-Many)</li>
+            <li>Product → Stock (One-to-One or One-to-Many for multiple locations)</li>
+            <li>Stock → SaleItem (One-to-Many)</li>
+            <li>Sale → SaleItem (One-to-Many)</li>
+            <li>Customer → Sale (One-to-Many)</li>
+            <li>Staff → Sale (One-to-Many)</li>
+        </ul>
+    </div>
+</body>
+</html>

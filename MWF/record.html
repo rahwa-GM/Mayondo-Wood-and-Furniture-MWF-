@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MWF Sample Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #2a7ae2;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #2a7ae2;
+            color: #fff;
+        }
+        caption {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MWF Sample Data</h1>
+
+    <!-- Staff -->
+    <table>
+        <caption>Staff</caption>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Mary Smith</td>
+            <td>Attendant</td>
+            <td>mary@mwf.com</td>
+            <td>+256700111222</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>James Okello</td>
+            <td>Manager</td>
+            <td>james@mwf.com</td>
+            <td>+256700333444</td>
+        </tr>
+    </table>
+
+    <!-- Customers -->
+    <table>
+        <caption>Customers</caption>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>John Doe</td>
+            <td>john@example.com</td>
+            <td>+256789001122</td>
+            <td>Kampala</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Jane Kato</td>
+            <td>jane@example.com</td>
+            <td>+256789003344</td>
+            <td>Entebbe</td>
+        </tr>
+    </table>
+
+    <!-- Suppliers -->
+    <table>
+        <caption>Suppliers</caption>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Uganda Timber Ltd</td>
+            <td>timber@ug.com</td>
+            <td>+256701112233</td>
+            <td>Kampala</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Furniture World</td>
+            <td>sales@furnitureworld.com</td>
+            <td>+256701223344</td>
+            <td>Jinja</td>
+        </tr>
+    </table>
+
+    <!-- Products -->
+    <table>
+        <caption>Products</caption>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Unit Price</th>
+            <th>Supplier</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Teak Wood Plank</td>
+            <td>Wood</td>
+            <td>5,000 UGX</td>
+            <td>Uganda Timber Ltd</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Wooden Chair</td>
+            <td>Furniture</td>
+            <td>50,000 UGX</td>
+            <td>Furniture World</td>
+        </tr>
+    </table>
+
+    <!-- Stock -->
+    <table>
+        <caption>Stock</caption>
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Warehouse</th>
+            <th>Last Updated</th>
+        </tr>
+        <tr>
+            <td>STK-101</td>
+            <td>Teak Wood Plank</td>
+            <td>50</td>
+            <td>Main Store</td>
+            <td>2025-11-15</td>
+        </tr>
+        <tr>
+            <td>STK-102</td>
+            <td>Teak Wood Plank</td>
+            <td>30</td>
+            <td>Warehouse B</td>
+            <td>2025-11-15</td>
+        </tr>
+        <tr>
+            <td>STK-201</td>
+            <td>Wooden Chair</td>
+            <td>20</td>
+            <td>Main Store</td>
+            <td>2025-11-15</td>
+        </tr>
+    </table>
+
+    <!-- Sale -->
+    <table>
+        <caption>Sale #001</caption>
+        <tr>
+            <th>Sale ID</th>
+            <th>Customer</th>
+            <th>Staff</th>
+            <th>Date</th>
+            <th>Transport Fee</th>
+            <th>Total Amount</th>
+        </tr>
+        <tr>
+            <td>001</td>
+            <td>John Doe</td>
+            <td>Mary Smith</td>
+            <td>2025-11-16</td>
+            <td>10,000 UGX</td>
+            <td>230,000 UGX</td>
+        </tr>
+    </table>
+
+    <!-- SaleItems -->
+    <table>
+        <caption>Sale Items for Sale #001</caption>
+        <tr>
+            <th>SaleItem ID</th>
+            <th>Stock ID / Location</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>STK-101 / Main Store</td>
+            <td>Teak Wood Plank</td>
+            <td>15</td>
+            <td>5,000 UGX</td>
+            <td>75,000 UGX</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>STK-102 / Warehouse B</td>
+            <td>Teak Wood Plank</td>
+            <td>5</td>
+            <td>5,000 UGX</td>
+            <td>25,000 UGX</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>STK-201 / Main Store</td>
+            <td>Wooden Chair</td>
+            <td>2</td>
+            <td>50,000 UGX</td>
+            <td>100,000 UGX</td>
+        </tr>
+    </table>
+</body>
+</html>

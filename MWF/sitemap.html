@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MWF Role-Based Sitemap</title>
+<style>
+  body {
+    background-color: #2b1f14;
+    color: #f6efe6;
+    font-family: sans-serif;
+    padding: 20px;
+  }
+  h1 { text-align: center; margin-bottom: 40px; }
+  .sitemap {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+  }
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .page {
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 160px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+  /* Role colors */
+  .manager { background-color: #d69e2e; color: #2b1f14; }
+  .sales { background-color: #2e8b57; color: #f6efe6; }
+  .both { background-color: #f6efe6; color: #2b1f14; }
+  .connector {
+    width: 2px;
+    height: 30px;
+    background-color: #f6efe6;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+<h1>MWF Role-Based Sitemap</h1>
+
+<div class="sitemap">
+  <!-- Manager Flow -->
+  <div class="column">
+    <div class="page manager">Manager Only</div>
+    <div class="connector"></div>
+    <div class="page manager">Products</div>
+    <div class="page manager">Suppliers</div>
+    <div class="page manager">Stock Report / Low Stock</div>
+    <div class="page manager">Payment Type Charts</div>
+    <div class="page manager">User Management</div>
+    <div class="page manager">Settings</div>
+  </div>
+
+  <!-- Both Roles -->
+  <div class="column">
+    <div class="page both">Both</div>
+    <div class="connector"></div>
+    <div class="page both">Customers</div>
+    <div class="page both">New Sale / POS</div>
+    <div class="page both">Sale Detail / Receipt</div>
+    <div class="page both">Sales List / Report</div>
+  </div>
+
+  <!-- Salesperson Flow -->
+  <div class="column">
+    <div class="page sales">Sales Only</div>
+  </div>
+</div>
+</body>
+</html>
