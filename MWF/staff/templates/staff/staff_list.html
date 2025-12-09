@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Breadcrumbs -->
+<div class="d-flex justify-content-end mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard_manager' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'staff:add' %}">Add Staff</a></li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+</div>
+<h2>Staff List</h2>
+<a href="{% url 'staff:add' %}" class="btn btn-primary mb-2">Add Staff</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Date Hired</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for s in staff_members %}
+        <tr>
+            <td>{{ s.user.get_full_name }}</td>
+            <td>{{ s.user.username }}</td>
+            <td>{{ s.user.email }}</td>
+            <td>{{ s.role }}</td>
+            <td>{{ s.phone_number }}</td>
+            <td>{{ s.date_hired }}</td>
+            <td>
+              <!-- Details Button -->
+              <button type="button"
+                      class="btn btn-sm btn-info me-1"
+                      data-bs-toggle="modal"
+                      data-bs-target="#detailsModal{{ s.id }}">
+                <i class="bi bi-eye"></i>
+              </button>
+              <!-- Edit -->
+              <a href="{% url 'staff:update' s.id %}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <!-- Delete Button -->
+              <button type="button"
+                      class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ s.id }}">
+                  <i class="bi bi-trash"></i>
+              </button>
+            </td>
+        </tr>
+
+      <!-- ============================= -->
+      <!-- DETAILS MODAL -->
+      <!-- ============================= -->
+      <div class="modal fade" id="detailsModal{{ s.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Staff Details: {{ s.user.get_full_name }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <p><strong>Name:</strong> {{ s.user.get_full_name }}</p>
+              <p><strong>Email:</strong> {{ s.user.email }}</p>
+              <p><strong>Username:</strong> {{ s.user.username }}</p>
+              <p><strong>Phone Number:</strong> {{ s.phone_number }}</p>
+              <p><strong>Role:</strong> {{ s.role }}</p>
+              <p><strong>Date hired:</strong> {{ s.date_hired }}</p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- DELETE MODAL (POST + CSRF) -->
+      <!-- ============================= -->
+      <div class="modal fade" id="deleteModal{{ s.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm Delete</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              Are you sure you want to delete 
+              <strong>{{  s.user.get_full_name }}</strong>?
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+              <!-- DELETE via POST (REQUIRED) -->
+              <form method="post"
+                    action="{% url 'staff:delete' s.id %}"
+                    style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

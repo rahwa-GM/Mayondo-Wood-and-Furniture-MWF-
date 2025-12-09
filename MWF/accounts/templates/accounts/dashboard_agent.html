@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Agent Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Agent Dashboard</h2>
+
+<!-- Quick Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Sales</h5>
+                <p class="card-text">UGX {{ agent_total_sales }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">Top Product</h5>
+                <p class="card-text">{{ agent_top_product }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-warning h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Orders</h5>
+                <p class="card-text">{{ agent_orders_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row">
+
+    <!-- Line Chart – Monthly Sales -->
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5>Monthly Sales</h5>
+            <div class="chart-container">
+                <canvas id="agentSalesLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bar Chart – Top Selling Products -->
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5>Top Selling Products</h5>
+            <div class="chart-container">
+                <canvas id="agentTopProductsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.chart-container {
+    max-height: 250px;
+    height: 100%;
+}
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+// LINE CHART – Monthly Sales
+new Chart(document.getElementById('agentSalesLineChart'), {
+    type: 'line',
+    data: {
+        labels: {{ agent_months|safe }},  // ["Jan", "Feb", ..., "Dec"]
+        datasets: [{
+            label: 'Monthly Sales',
+            data: {{ agent_sales|safe }},      // [0, 0, 0, ..., 1500000]
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 2,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+// BAR CHART – Top 5 Products
+new Chart(document.getElementById('agentTopProductsChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ agent_top_product_names|safe }},  // ["Timber", "Chairs"]
+        datasets: [{
+            label: 'Units Sold',
+            data: {{ agent_top_product_units|safe }}, // [20, 10]
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+</script>
+{% endblock %}

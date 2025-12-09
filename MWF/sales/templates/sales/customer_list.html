@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+<div class="d-flex justify-content-end mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard_manager' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'sales:add_customer' %}">Add Customer</a></li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Success + Error Messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<h2 class="mb-3">Customer List</h2>
+
+<a href="{% url 'sales:add_customer' %}" class="btn btn-primary mb-3">Add Customer</a>
+
+<table class="table table-striped">
+  <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Company</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+  </thead>
+
+  <tbody>
+  {% for customer in customers %}
+      <tr>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.phone_number }}</td>
+          <td>{{ customer.company }}</td>
+          <td>{{ customer.address }}</td>
+          <td>
+
+              <!-- Details Button -->
+              <button type="button"
+                      class="btn btn-sm btn-info me-1"
+                      data-bs-toggle="modal"
+                      data-bs-target="#detailsModal{{ customer.id }}">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <!-- Edit -->
+              <a href="{% url 'sales:update_customer' customer.id %}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <!-- Delete Button -->
+              <button type="button"
+                      class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ customer.id }}">
+                  <i class="bi bi-trash"></i>
+              </button>
+
+          </td>
+      </tr>
+
+      <!-- ============================= -->
+      <!-- DETAILS MODAL -->
+      <!-- ============================= -->
+      <div class="modal fade" id="detailsModal{{ customer.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Customer Details: {{ customer.name }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <p><strong>Name:</strong> {{ customer.name }}</p>
+              <p><strong>Email:</strong> {{ customer.email }}</p>
+              <p><strong>Phone Number:</strong> {{ customer.phone_number }}</p>
+              <p><strong>Company:</strong> {{ customer.company }}</p>
+              <p><strong>Address(cm):</strong> {{ customer.address }}</p>
+              {% if customer.created_at %}
+                <p><strong>Created At:</strong> {{ customer.created_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+              {% if customer.updated_at %}
+                <p><strong>Updated At:</strong> {{ customer.updated_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- DELETE MODAL (POST + CSRF) -->
+      <!-- ============================= -->
+      <div class="modal fade" id="deleteModal{{ customer.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm Delete</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              Are you sure you want to delete 
+              <strong>{{ customer.name }}</strong>?
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+              <!-- DELETE via POST (REQUIRED) -->
+              <form method="post"
+                    action="{% url 'sales:delete_customer' customer.id %}"
+                    style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

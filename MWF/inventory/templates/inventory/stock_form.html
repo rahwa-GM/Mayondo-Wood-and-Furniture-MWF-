@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- Breadcrumbs -->
+<div class="d-flex justify-content-end mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard_manager' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'inventory:list_stock' %}">Stock List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+  </nav>
+</div>
+<h2>{{ title }}</h2>
+<form action = {% url 'inventory:add_stock' %}  method="POST" novalidate>
+    {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'inventory:list_stock' %}" class="btn btn-secondary">Cancel</a>
+
+</form>
+{% endblock %}

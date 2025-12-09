@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+<div class="d-flex justify-content-end mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard_manager' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'inventory:add_product' %}">Add Product</a></li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Success + Error Messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<h2 class="mb-3">Product List</h2>
+
+<a href="{% url 'inventory:add_product' %}" class="btn btn-primary mb-3">Add Product</a>
+
+<table class="table table-striped">
+  <thead>
+      <tr>
+        <th>Name</th>
+        <th>Product Type</th>
+        <th>Description</th>
+        <th>Color</th>
+        <th>Measurement(cm)</th>
+        <th>Actions</th>
+
+      </tr>
+  </thead>
+
+  <tbody>
+  {% for product in products %}
+      <tr>
+          <td>{{ product.name }}</td>
+          <td>{{ product.product_type }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.color }}</td>
+          <td>{{ product.measurements }}</td>
+          <td>
+
+              <!-- Details Button -->
+              <button type="button"
+                      class="btn btn-sm btn-info me-1"
+                      data-bs-toggle="modal"
+                      data-bs-target="#detailsModal{{ product.id }}">
+                <i class="bi bi-eye"></i>
+              </button>
+              {% if staff.role == 'Manager' %}
+              <!-- Edit -->
+              <a href="{% url 'inventory:update_product' product.id %}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <!-- Delete Button -->
+              <button type="button"
+                      class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ product.id }}">
+                  <i class="bi bi-trash"></i>
+              </button>
+            {% endif %}
+          </td>
+      </tr>
+
+      <!-- ============================= -->
+      <!-- DETAILS MODAL -->
+      <!-- ============================= -->
+      <div class="modal fade" id="detailsModal{{ product.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Product Details: {{ product.name }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <p><strong>Name:</strong> {{ product.name }}</p>
+              <p><strong>Product Type:</strong> {{ product.product_type }}</p>
+              <p><strong>Description:</strong> {{ product.description }}</p>
+              <p><strong>Color:</strong> {{ product.color }}</p>
+              <p><strong>Measurement(cm):</strong> {{ product.measurements }}</p>
+              {% if product.created_at %}
+                <p><strong>Created At:</strong> {{ product.created_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+              {% if product.updated_at %}
+                <p><strong>Updated At:</strong> {{ product.updated_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- DELETE MODAL (POST + CSRF) -->
+      <!-- ============================= -->
+      <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm Delete</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              Are you sure you want to delete 
+              <strong>{{ product.name }}</strong>?
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+              <!-- DELETE via POST (REQUIRED) -->
+              <form method="post"
+                    action="{% url 'inventory:delete_product' product.id %}"
+                    style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="POST" novalidate>
+    {% csrf_token %}
+    <h4>User Info</h4>
+    {{ user_form | crispy }}
+    <h4>Staff Info</h4>
+    {{ staff_form | crispy }}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'staff:list' %}" class="btn btn-secondary">Cancel</a>
+
+</form>
+{% endblock %}

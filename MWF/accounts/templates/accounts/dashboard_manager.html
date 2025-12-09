@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Manager Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Manager Dashboard</h2>
+
+<!-- Quick Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Sales</h5>
+                <p class="card-text">UGX {{ total_sales }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-danger h-100">
+            <div class="card-body">
+                <h5 class="card-title">Stock Alerts</h5>
+                <p class="card-text">{{ stock_alerts }} products low</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">Most Sold Product</h5>
+                <p class="card-text">{{ most_sold_product }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-warning h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Staff</h5>
+                <p class="card-text">{{ total_staff }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5>Monthly Sales</h5>
+            <div class="chart-container">
+                <canvas id="salesLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5>Top Selling Products</h5>
+            <div class="chart-container">
+                <canvas id="productBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5>Sales by Category</h5>
+            <div class="chart-container">
+                <canvas id="categoryPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chart-container {
+    max-height: 300px;   /* limit chart height */
+    height: 100%;        /* fill container */
+}
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ====================
+// LINE CHART – Monthly Sales
+// ====================
+new Chart(document.getElementById('salesLineChart'), {
+    type: 'line',
+    data: {
+        labels: {{ months|safe }},            // months list from context (Jan, Feb, ...)
+        datasets: [{
+            label: 'Monthly Sales (UGX)',
+            data: {{ sales_data|safe }},      // total sales per month
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            tension: 0.4,
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return 'UGX ' + context.formattedValue;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// ====================
+// BAR CHART – Top Selling Products
+// ====================
+new Chart(document.getElementById('productBarChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ product_names|safe }},    // top product names
+        datasets: [{
+            label: 'Units Sold',
+            data: {{ product_units|safe }},   // units sold per product
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// ====================
+// PIE CHART – Sales by Category
+// ====================
+new Chart(document.getElementById('categoryPieChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ category_names|safe }},   // product categories
+        datasets: [{
+            data: {{ category_sales|safe }}, // total units per category
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(54, 162, 235, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+{% endblock %}

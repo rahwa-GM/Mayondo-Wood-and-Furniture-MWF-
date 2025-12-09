@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+<div class="d-flex justify-content-end mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard_manager' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'inventory:add_stock' %}">Add Stock</a></li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Success + Error Messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<h2 class="mb-3">Stock List</h2>
+
+<a href="{% url 'inventory:add_stock' %}" class="btn btn-primary mb-3">Add Stock</a>
+
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th>Product</th>
+          <th>Supplier</th>
+          <th>Purchase Price</th>
+          <th>Selling Price</th>
+          <th>Quantity</th>
+          <th>Quality</th>
+          <th>Date Received</th>
+          <th>Actions</th>
+      </tr>
+  </thead>
+
+  <tbody>
+  {% for stock in stock_items %}
+      <tr>
+          <td>{{ stock.product }}</td>
+          <td>{{ stock.supplier }}</td>
+          <td>{{ stock.cost_price|floatformat:2 }}</td>
+          <td>{{ stock.product_price|floatformat:2 }}</td>
+          <td>{{ stock.quantity }}</td>
+          <td>{{ stock.quality }}</td>
+          <td>{{ stock.date_received|date:"M d, Y" }}</td>
+          <td>
+
+              <!-- Details Button -->
+              <button type="button"
+                      class="btn btn-sm btn-info me-1"
+                      data-bs-toggle="modal"
+                      data-bs-target="#detailsModal{{ stock.id }}">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              {% if staff.role == 'Manager' %}
+              <!-- Edit -->
+              <a href="{% url 'inventory:update_stock' stock.id %}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <!-- Delete Button -->
+              <button type="button"
+                      class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ stock.id }}">
+                  <i class="bi bi-trash"></i>
+              </button>
+              {% endif %}
+          </td>
+      </tr>
+
+      <!-- ============================= -->
+      <!-- DETAILS MODAL -->
+      <!-- ============================= -->
+      <div class="modal fade" id="detailsModal{{ stock.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Stock Details: {{ stock.product }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <p><strong>Product:</strong> {{ stock.product }}</p>
+              <p><strong>Supplier:</strong> {{ stock.supplier }}</p>
+              <p><strong>Purchase Price:</strong> {{ stock.cost_price|floatformat:2 }}</p>
+              <p><strong>Selling Price:</strong> {{ stock.product_price|floatformat:2 }}</p>
+              <p><strong>Quantity:</strong> {{ stock.quantity }}</p>
+              <p><strong>Quality:</strong> {{ stock.quality }}</p>
+              <p><strong>Date Received:</strong> {{ stock.date_received|date:"M d, Y" }}</p>
+              {% if stock.created_at %}
+                <p><strong>Created At:</strong> {{ stock.created_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+              {% if stock.updated_at %}
+                <p><strong>Updated At:</strong> {{ stock.updated_at|date:"M d, Y H:i" }}</p>
+              {% endif %}
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- DELETE MODAL (POST + CSRF) -->
+      <!-- ============================= -->
+      <div class="modal fade" id="deleteModal{{ stock.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Confirm Delete</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              Are you sure you want to delete 
+              <strong>{{ stock.product }}</strong>?
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+              <!-- DELETE via POST (REQUIRED) -->
+              <form method="post"
+                    action="{% url 'inventory:delete_stock' stock.id %}"
+                    style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
